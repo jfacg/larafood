@@ -5,6 +5,49 @@ Route::prefix('admin')
     ->middleware('auth')
     ->group(function(){
 
+
+    
+
+
+      /**
+    * Routes  Tables
+    */
+    Route::resource('tables', 'TableController')->middleware('can:tables');
+    Route::any('tables/search', 'TableController@search')->name('tables.search');
+
+
+    /**
+    * Routes Permissions Profile
+    */
+    Route::get('categories/{id}/products', 'CategoryProductController@products')->name('categories.products.index');
+    Route::any('categories/{id}/product/create', 'CategoryProductController@productsAvailable')->name('categories.products.available');
+    Route::post('categories/{id}/products', 'CategoryProductController@attachProductsCategory')->name('categories.products.attach');
+    Route::get('categories/{id}/product/{idProduct}/detach', 'CategoryProductController@detachProductsCategory')->name('categories.products.detach');
+    
+    Route::get('products/{id}/categories', 'CategoryProductController@categories')->name('products.categories.index');
+    // Route::any('products/{id}/category/create', 'CategoryProductController@categoriesAvailable')->name('products.categories.available');
+    // Route::post('products/{id}/categories', 'CategoryProductController@attachCategoriesProduct')->name('products.categories.attach');
+    // Route::get('products/{id}/category/{idCategory}/detach', 'CategoryProductController@detachCategoriesProduct')->name('products.categories.detach');
+
+    /**
+    * Routes  Products
+    */
+    Route::resource('products', 'ProductController');
+    Route::any('products/search', 'ProductController@search')->name('products.search');
+
+    /**
+    * Routes  Categories
+    */
+    Route::resource('categories', 'CategoryController');
+    Route::any('categories/search', 'CategoryController@search')->name('categories.search');
+
+    /**
+    * Routes  Users
+    */
+    Route::resource('users', 'UserController');
+    Route::get('users/search', 'UserController@search')->name('users.search');
+    
+
      /**
     * Routes Plan Profile
     */
@@ -83,6 +126,7 @@ Route::prefix('admin')
 
 
 
+Route::get('/plan/{url}', 'Site\SiteController@plan')->name('plan.subscription');
 Route::get('/', 'Site\SiteController@index')->name('site.home');
 
 Auth::routes();
